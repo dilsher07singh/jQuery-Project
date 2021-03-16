@@ -1,0 +1,71 @@
+
+
+body {
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+	font-size: 62.5%;
+  background-image: url(https://upload.wikimedia.org/wikipedia/commons/8/89/Kuantan_Beach_-_panoramio_%282%29.jpg);
+  background-size: cover;
+}
+
+.head{
+font: bold 30px "Century Schoolbook", Georgia, Times, serif;
+  color: #333;
+  line-height: 90%;
+  margin: .2em 0 .4em 0;
+  letter-spacing: -5px;
+}
+
+.searchbox{
+  width: 100%;
+    text-align:center;
+
+}
+
+.para{
+    font-weight: bold;
+
+font-size: large;
+   width: 100%;
+    text-align:center;
+}
+
+.ui-autocomplete {
+	max-height: 200px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+.ui-autocomplete-category {
+	font-weight: bold;
+	padding: .2em .4em;
+	margin: .8em 0 .2em;
+	line-height: 1.5;
+}
+
+.red {
+	color: red;
+}
+
+.bluefilter {
+  font-weight: bold;
+  color:blue;
+}
+
+.ui-menu-item a{
+  font-weight: bold;
+}
+
+.finalfilter{
+  font-family:  'Hoefler Text', Georgia, 'Times New Roman', serif;
+  background-color: white;
+  font-weight: normal;
+        font-size: 1.75em;
+  letter-spacing: .2em;
+  line-height: 1.1em;
+  padding:20%;
+  margin:0px;
+  text-align: center;
+  text-transform: uppercase;
+
+}

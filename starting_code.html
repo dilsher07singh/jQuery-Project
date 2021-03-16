@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Autocomplete - Categories</title>
+  <link rel="stylesheet" href="jquery-ui.css">
+  <script src="jquery-1.11.3.js"></script>
+  <script src="jquery-ui.js"></script>
+  <link rel="stylesheet" href="style.css">
+  
+  </head>
+
+<body>
+ <div class="head">
+ <h1> Welcome To Holiday Destination Selector </h1>
+</div>
+
+<div class="searchbox">
+<label for="search">Search: </label>
+<input id="search" size="50" placeholder="Places you want to visit">
+</div>
+
+
+<div class="searchbox">
+<button class="wow"> Submit to check your selected results </button>
+ </div>
+</form>
+
+<p class="para"> </p>
+<ol id="order"> </ol>
+
+ <script>
+
+// Data from google for subcontinents
+
+    var data = [
+      { label: "Andaman-Nicobar", category: "" },
+      { label: "Antartica", category: "" },
+      { label: "The Arctic", category: "" },
+      { label:"Andorra", category:"Europe" },
+      { label:"Albania", category:"Europe" },
+      { label:"Austria", category:"Europe" },
+      { label:"Bosnia and Herzegovina", category:"Europe" },
+      { label:"Belgium", category:"Europe" },
+      { label:"Bulgaria", category:"Europe" },
+      { label:"India", category:"Asia" },
+      { label:"Bangladesh", category:"Asia" },
+      { label:"Bahrain", category:"Asia" },
+      { label:"Bhutan", category:"Asia" },
+      { label:"China", category:"Asia" },
+      { label:"Hong Kong", category:"Asia" },
+      { label:"Haiti", category:"North America" },
+      { label:"Jamaica", category:"North America" },
+      { label:"Cayman Islands", category:"North America" },
+      { label:"Montserrat", category:"North America" },
+      { label:"Nicaragua", category:"North America" },
+      { label:"Panama", category:"North America" },
+      { label:"Peru", category:"South America" },
+      { label:"Paraguay", category:"South America" },
+      { label:"Argentina", category:"South America" },
+      { label:"Bolivia", category:"South America" },
+      { label:"Brazil", category:"South America" },
+      { label:"Chile", category:"South America" },
+      { label:"Cameroon", category:"Africa" },
+      { label:"Congo (Kinshasa)", category:"Africa" },
+      { label:"Cote d'Ivoire", category:"Africa" },
+      { label:"Algeria", category:"Africa" },
+      { label:"Ethiopia", category:"Africa" },
+      { label:"Ireland", category:"Europe" },
+      { label:"Italy", category:"Europe" },
+      { label:"Jersey", category:"Europe" },
+      { label:"Portugal", category:"Europe" },
+      { label:"Romania", category:"Europe" },
+
+    ];
+
+    
+    function split( val ) {
+          return val.split( /,\s*/ );
+      }
+
+      function extractLast( term ) {
+          return split( term ).pop();
+      }
+
+     
+    
+    $.widget("custom.catcomplete", $.ui.autocomplete, {
+      _create: function() {
+        this._super();
+        this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+      },
+      _renderMenu: function(ul, items) {
+        var that = this,
+          currentCategory = "";
+        $.each(items, function(index, item) {
+          var li;
+          if (item.category != currentCategory) {
+            ul.append("<li class='ui-autocomplete-category red'>" + item.category + "</li>");
+            currentCategory = item.category;
+          }
+          li = that._renderItemData(ul, item);
+          if (item.category) {
+            li.attr("aria-label", item.category + " : " + item.label);
+          }
+  
+        });
+ 
+      },
+      // display items on view
+      _renderItem: function( ul, item ) {
+  terms = this.term.split(',');
+  term = terms[terms.length -1].trim();
+//regexp helps to replace letters
+  var result = new RegExp(term, "gi");
+  var term = item.label.replace(result, function(match) {
+      return "<span class='bluefilter'>" + match + "</span>"
+    });
+//bluefilter class makes typed word blue
+  return $("<li>").append("<a>" + term + "</a>").appendTo(ul);
+//add to the unordered list in the form of li
+      }
+    });
+
+    
+        $( "#search" )
+        // don't navigate away from the field on tab when selecting an item
+        .bind( "keydown", function( event ) {
+          if ( event.keyCode === $.ui.keyCode.TAB &&
+              $( this ).catcomplete( "instance" ).menu.active ) {
+            event.preventDefault();
+          }
+        })
+        .catcomplete({
+          minLength: 0,
+          source: function( request, response ) {
+            // delegate back to catcomplete, but extract the last term
+            response( $.ui.autocomplete.filter(
+              data, extractLast( request.term ) ) );
+          },
+          focus: function() {
+            // prevent value inserted on focus
+            return false;
+          },
+          select: function( event, ui ) {
+            
+
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+
+            this.value = terms.join( ", " );
+                   // add selected data to the ordered list in the form of buttons
+                   $("ol").append("<div> <button> <li>"+ui.item.value+"</div> </li> </button>");
+                       $("ol").hide();      
+                      //hide the data for now to show later when button is clicked
+            return false;
+    
+          }
+          });
+
+        
+        //when button is clicked display all the item values 
+        // change button html to great selection of names choice
+        //append ordered list to paragraph 
+        // and then show using .show
+      $(".wow").click(function(){
+        $(".wow").html("Great Selection of Names Choice");
+        $("p").append("Choices To Go for excellent vacation: PLEASE CLICK A BUTTON");
+       $("p").append($("ol"));
+        $("ol").show();
+       
+
+ 
+});
+        //when a button is clicked display it as shortlisted item
+        //empty the whole body to remove search bar and buttons
+        //only display item selected with a statement
+        //add class of finalfilter for nice big display
+      $(document).on('click', '#order > div > button', function(){ 
+        $("body").empty();
+        $("body").append("CONGRATULATION YOU HAVE SHORTLISTED")
+        $("body").append($(this).text()).addClass("finalfilter");
+                $("body").append("  FOR YOUR VACATION !!!!");
+
+      })
+
+        
+
+
+
+
+        /*
+        var hehe=$("ol").html();
+        var term=hehe.split(",");
+        $("p").append("<div>"+"<button>"+term+"</button>"+"</div>");
+        */
+      
+
+  </script>
+
+</body>
+</html>
