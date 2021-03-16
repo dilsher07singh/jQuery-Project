@@ -1,4 +1,3 @@
-Comp 4021 Assignment 1
 
 Name of Website: Holiday Destination Selector
 
